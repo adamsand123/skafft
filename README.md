@@ -4,6 +4,8 @@
 * figlet
 
 # TODO
+MENY
+* Fixa felkontroll av första och andra argumenten för valet options
 
 UTSEENDE
 * Fixa banner

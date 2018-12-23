@@ -14,7 +14,7 @@ check_dependencies() {
 	for PACKAGE in ${Packages[*]}; do
 		which $PACKAGE &>/dev/null
 		if [ $? -eq 1 ]; then
-			echo -e "\t=[ \e[93mmissing dependencies $PACKAGE\e[0m\t]"
+			echo -e "\t=[ \e[93mmissing dependency $PACKAGE\e[0m\t]"
 		fi
 	done
 }
@@ -42,7 +42,7 @@ print_menu() {
 	# --------- TO DO SÄTT ALLA PRINT PÅ SAMMA RAD MED \n
 
 
-	echo -e "group:add\t\tCreate a new user\ngroup:list\t\tList system groups\ngroup:view\t\tList user associations for group\ngroup:modify\t\tModify user associations for group\nuser:add\t\tCreate a new user\nuser:list\t\tList system user\nuser:view\t\tView user properties\nuser:modify\t\tModify user properties\nfolder:add\t\tCreate a new folder\nfolder:list\t\tList folder contents\nfolder:view\t\tView folder properties\nfolder:modify\t\tModify folder properties"
+	echo -e "group:add\t\tCreate a new user\ngroup:list\t\tList system groups\ngroup:view\t\tList user associations for group\ngroup:modify\t\tModify user associations for group\nuser:add\t\tCreate a new user\nuser:list\t\tList system user\nuser:view\t\tView user properties\nuser:modify\t\tModify user properties\nfolder:add\t\tCreate a new folder\nfolder:list\t\tList folder contents\nfolder:view\t\tView folder properties\nfolder:modify\t\tModify folder properties\noptions:dependencies\tCheck for missing dependencies\noptions:install\t\tinstall missing dependencies"
 }
 
 # FUNKTION - Kolla om figlet och lolcat är installerat
@@ -85,12 +85,12 @@ process_input() {
 
 
 		# If-sats: kollar om opt1 är en substräng till group, user, eller folder (till exakt en av strängarna)
-		if [ $(echo -e "group\nuser\nfolder" | grep ^$opt1 | wc -l) -eq 1 ]; then
-			opt1=$(echo -e "group\nuser\nfolder" | grep ^$opt1) # Sätter opt1 till det val som matchades från input
+		if [ $(echo -e "group\nuser\nfolder\noptions" | grep ^$opt1 | wc -l) -eq 1 ]; then
+			opt1=$(echo -e "group\nuser\nfolder\noptions" | grep ^$opt1) # Sätter opt1 till det val som matchades från input
 
 		# ---------- FELKONTROLL OM FLERA MÖJLIGA MATCHNINGAR (BEHÖVS EJ FÖR DE HÄR VALEN) -------------
-		elif [ $(echo -e "group\nuser\nfolder" | grep ^$opt1 | wc -l) -gt 1 ]; then # OM flera matchningar
-			echo -e "ERROR: ambiguous command, possibilities:\n$(echo -e "group\nuser\nfolder" | grep ^$opt1)"
+		elif [ $(echo -e "group\nuser\nfolder\noptions" | grep ^$opt1 | wc -l) -gt 1 ]; then # OM flera matchningar
+			echo -e "ERROR: ambiguous command, possibilities:\n$(echo -e "group\nuser\nfolder\noptions" | grep ^$opt1)"
 
 
 
@@ -106,6 +106,11 @@ process_input() {
 			fi
 
 		fi
+
+############### ----------------------------- IF-SATS så att de här 2a argumenten hör till endast group,user,folder för 1a arg
+############### ----------------------------- Lägg även till 2a options för det första argumentet "options"
+############### ----------------------------- Om första arg=user,group,folder kör det under, annars om första=options kör andra felkontroller
+
 
 		# If-sats: kollar om opt2 är en substräng till add, list, view, eller modify (till exakt en av strängarna)
 		if [ $(echo -e "add\nlist\nview\nmodify" | grep ^$opt2 | wc -l) -eq 1 ]; then
