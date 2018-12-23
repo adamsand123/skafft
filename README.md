@@ -1,3 +1,8 @@
+# Requicred packages:
+* cowsay
+* lolcat
+* figlet
+
 # TODO
 
 UTSEENDE

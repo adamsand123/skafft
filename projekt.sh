@@ -1,29 +1,65 @@
 #!/bin/bash
 
+# FUNKTION - dependencies
+check_dependencies() {
+
+
+#	which lolcat &>/dev/null
+#	if [ $? -eq 1 ]; then
+#	fi
+
+
+	Packages=('lolcat' 'figlet' 'cowsay')
+
+	for PACKAGE in ${Packages[*]}; do
+		which $PACKAGE &>/dev/null
+		if [ $? -eq 1 ]; then
+			echo -e "\t=[ \e[93mmissing dependencies $PACKAGE\e[0m\t]"
+		fi
+	done
+}
+
 # FUNKTION - SKRIV UT BANNER
 print_banner() {
-	echo "#"
+	echo "Adam"
+	echo "Jesse"
+}
+# FUNKTION - MANUELL BANNER
+pretty_banner() {
+	echo "###############################################"
+}
+
+# FUNKTION - skirv ut version info
+print_version() {
+	echo -e "\n\t=[ \e[93msysmod38 v0.1.disco-dev \e[0m\t]"
 }
 
 # FUNKTION - MENY
 print_menu() {
-	echo -e "group:add\t\tCreate a new user"
-	echo -e "group:list\t\tList system groups"
-	echo -e "group:view\t\tList user associations for group"
-	echo -e "group:modify\t\tModify user associations for group"
-	echo -e "user:add\t\tCreate a new user"
-	echo -e "user:list\t\tList system user"
-	echo -e "user:view\t\tView user properties"
-	echo -e "user:modify\t\tModify user properties"
-	echo -e "folder:add\t\tCreate a new folder"
-	echo -e "folder:list\t\tList folder contents"
-	echo -e "folder:view\t\tView folder properties"
-	echo -e "folder:modify\t\tModify folder properties"
+	echo -e "\e[1;35;92m" ###### ------------- ÄNDRAR FÄRG FÖR TEXT
+
+
+	# --------- TO DO SÄTT ALLA PRINT PÅ SAMMA RAD MED \n
+
+
+	echo -e "group:add\t\tCreate a new user\ngroup:list\t\tList system groups\ngroup:view\t\tList user associations for group\ngroup:modify\t\tModify user associations for group\nuser:add\t\tCreate a new user\nuser:list\t\tList system user\nuser:view\t\tView user properties\nuser:modify\t\tModify user properties\nfolder:add\t\tCreate a new folder\nfolder:list\t\tList folder contents\nfolder:view\t\tView folder properties\nfolder:modify\t\tModify folder properties"
+}
+
+# FUNKTION - Kolla om figlet och lolcat är installerat
+verify_packages() {
+	which figlet &>/dev/null && which lolcat &>/dev/null
+	if [ $? -eq 0 ]; then
+		print_banner | figlet | lolcat -a -s 20 -d 3 -F 1
+		print_version
+	else
+		pretty_banner
+		print_version
+	fi
 }
 
 # FUNKTION - user input
 get_input() {
-	echo -n "_"	# gör blinkande
+	echo -ne "\e[4msysmod38\e[0m > "	# gör blinkande
 	read val
 }
 
@@ -41,7 +77,7 @@ process_input() {
 #	done
 
 
-	if [ $(echo $val | grep :) -eq 1 ]; then # Felkontroll, endast ett ':'
+	if [ $(echo $val | grep : | wc -l) -eq 1 ]; then # Felkontroll, endast ett ':'
 
 		# Dela upp input i två variabler separerade med delimiter ':'
 		opt1=$(echo $val | cut -d: -f1)
@@ -56,8 +92,19 @@ process_input() {
 		elif [ $(echo -e "group\nuser\nfolder" | grep ^$opt1 | wc -l) -gt 1 ]; then # OM flera matchningar
 			echo -e "ERROR: ambiguous command, possibilities:\n$(echo -e "group\nuser\nfolder" | grep ^$opt1)"
 
+
+
+######### ------------------ FEL HÄR SKRIVER UT TVÅ FELMEDDELANDEN OM 
+
+
 		else # OM ingen matchning
-			echo "Please enter a valid option"	# skriv ut hjälp meny?
+			which cowsay &>/dev/null
+			if [ $? -eq 0 ]; then
+				cowsay "Please enter a valid option for the first argument" | lolcat -F 1 -a -s 150
+			else
+				echo "Please enter a valid option for the first argument"	# skriv ut hjälp meny?
+			fi
+
 		fi
 
 		# If-sats: kollar om opt2 är en substräng till add, list, view, eller modify (till exakt en av strängarna)
@@ -68,8 +115,20 @@ process_input() {
 		elif [ $(echo -e "add\nlist\nview\nmodify" | grep ^$opt2 | wc -l) -gt 1 ]; then # OM flera matchningar
 			echo -e "ERROR: ambiguous command, possibilities:\n$(echo -e "add\nlist\nview\nmodify" | grep ^$opt2)"
 
+
+
+
+######### ------------------ FEL HÄR SKRIVER UT TVÅ FELMEDDELANDEN OM 
+
+
+
 		else
-			echo "Please enter a valid option"	# skriv ut hjälp meny?
+			which cowsay &>/dev/null
+			if [ $? -eq 0 ]; then
+				cowsay "Please enter a valid option for the second argument" | lolcat -F 1 -a -s 150
+			else
+				echo "Please enter a valid option for the second argument"	# skriv ut hjälp meny?
+			fi
 		fi
 
 		# Hitta användarens val mha opt1 och opt2 och kalla på rätt funktion
@@ -116,15 +175,21 @@ process_input() {
 			fi
 		fi
 	else
-		echo "INVALID SYNTAX: $val"
+		which cowsay &>/dev/null
+		if [ $? -eq 0 ]; then
+			cowsay Please enter a valid option | lolcat -a -s 100 -F 1
+		else	
+			echo "INVALID SYNTAX: $val"
+		fi
 	fi
 }
 
 # FUNKTION - MAIN
 main() {
-	# kalla på banner funktion
-	print_banner
-
+	clear
+	# BANNER
+	verify_packages
+	check_dependencies
 	# while loop tills avsluta
 	while true; do
 		# Skriv ut meny
