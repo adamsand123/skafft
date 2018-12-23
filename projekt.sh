@@ -34,6 +34,8 @@ print_version() {
 	echo -e "\n\t=[ \e[93msysmod38 v0.1.disco-dev \e[0m\t]"
 }
 
+
+
 # FUNKTION - MENY
 print_menu() {
 	echo -e "\e[1;35;92m" ###### ------------- ÄNDRAR FÄRG FÖR TEXT
@@ -44,6 +46,8 @@ print_menu() {
 
 	echo -e "group:add\t\tCreate a new user\ngroup:list\t\tList system groups\ngroup:view\t\tList user associations for group\ngroup:modify\t\tModify user associations for group\nuser:add\t\tCreate a new user\nuser:list\t\tList system user\nuser:view\t\tView user properties\nuser:modify\t\tModify user properties\nfolder:add\t\tCreate a new folder\nfolder:list\t\tList folder contents\nfolder:view\t\tView folder properties\nfolder:modify\t\tModify folder properties\noptions:dependencies\tCheck for missing dependencies\noptions:install\t\tinstall missing dependencies"
 }
+
+
 
 # FUNKTION - Kolla om figlet och lolcat är installerat
 verify_packages() {
