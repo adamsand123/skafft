@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # FUNKTION - SKRIV UT BANNER
-banner() {
+print_banner() {
 	echo "#"
 }
 
 # FUNKTION - MENY
-menu() {
+print_menu() {
 	echo -e "group:add\t\tCreate a new user"
 	echo -e "group:list\t\tList system groups"
 	echo -e "group:view\t\tList user associations for group"
@@ -24,12 +24,12 @@ menu() {
 # FUNKTION - MAIN
 main() {
 	# kalla på banner funktion
-	banner
+	print_banner
 
 	# while loop tills avsluta
 	while true; do
 		# Skriv ut meny
-		menu
+		print_menu
 
 	done
 
