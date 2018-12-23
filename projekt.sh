@@ -36,16 +36,25 @@ process_input() {
 	# ------------ LÄGG TILL FUNKTION FÖR '?' -----------------
 
 	# If-sats: kollar om opt1 är en substräng till group, user, eller folder (till exakt en av strängarna)
-	if [ $(echo -e "group\nuser\nfolder" | grep $opt1 | wc -l) = 1 ]; then
-		opt1=$(echo -e "group\nuser\nfolder" | grep $opt1) # Sätter opt1 till det val som matchades från input
-	# Om 0 eller fler än 1 matchningar med input skriv ut felmeddelande
-	else
+	if [ $(echo -e "group\nuser\nfolder" | grep ^$opt1 | wc -l) = 1 ]; then
+		opt1=$(echo -e "group\nuser\nfolder" | grep ^$opt1) # Sätter opt1 till det val som matchades från input
+
+	# ---------- FELKONTROLL OM FLERA MÖJLIGA MATCHNINGAR (BEHÖVS EJ FÖR DE HÄR VALEN) -------------
+	elif [ $(echo -e "group\nuser\nfolder" | grep ^$opt1 | wc -l) > 1 ]; then # OM flera matchningar
+		echo -e "ERROR: ambiguous command, possibilities:\n$(echo -e "group\nuser\nfolder" | grep ^$opt1)"
+
+	else # OM ingen matchning
 		echo "Please enter a valid option"	# skriv ut hjälp meny?
 	fi
 
 	# If-sats: kollar om opt2 är en substräng till add, list, view, eller modify (till exakt en av strängarna)
-	if [ $(echo -e "add\nlist\nview\nmodify" | grep $opt2 | wc -l) = 1 ]; then
+	if [ $(echo -e "add\nlist\nview\nmodify" | grep ^$opt2 | wc -l) = 1 ]; then
 		opt2=$(echo -e "add\nlist\nview\nmodify" | grep $opt2) # Sätter opt2 till det val som matchades från input
+
+	# ---------- FELKONTROLL OM FLERA MÖJLIGA MATCHNINGAR (BEHÖVS EJ FÖR DE HÄR VALEN) -------------
+	elif [ $(echo -e "add\nlist\nview\nmodify" | grep ^$opt2 | wc -l) > 1 ]; then # OM flera matchningar
+		echo -e "ERROR: ambiguous command, possibilities:\n$(echo -e "add\nlist\nview\nmodify" | grep ^$opt2)"
+
 	else
 		echo "Please enter a valid option"	# skriv ut hjälp meny?
 	fi
@@ -54,31 +63,43 @@ process_input() {
 	if [ $opt1 = "group" ]; then # Group
 		if [ $opt2 = "add" ]; then # Add group
 			# Kalla på funktion för att skapa en ny grupp
+			echo "group:add" # Bash ger error utan något här inne
 		elif [ $opt2 = "list" ]; then # List groups
 			# Kalla på funktion för att lista alla grupper
+			echo "group:list" # Bash ger error utan något här inne
 		elif [ $opt2 = "view" ]; then # View groups
 			# Kalla på funktion för att visa (rättigheter?) på en grupp
+			echo "group:view" # Bash ger error utan något här inne
 		else # Modify group
+			echo "group:mod" # Bash ger error utan något här inne
 		fi
 	elif [ $opt1 = "user" ]; then # User
 		if [ $opt2 = "add" ]; then # Add user
 			# Kalla på funktion för att skapa användare
+			echo "user:add" # Bash ger error utan något här inne
 		elif [ $opt2 = "list" ]; then # List users
 			# Kalla på funktion för att lista alla användare
+			echo "user:list" # Bash ger error utan något här inne
 		elif [ $opt2 = "view" ]; then # View users
 			# Kalla på funktion för att se information om en användare
+			echo "user:view" # Bash ger error utan något här inne
 		else # Modify user
 			# Kalla på funktion för att modifiera en användare
+			echo "user:mod" # Bash ger error utan något här inne
 		fi
 	else # Folder
 		if [ $opt2 = "add" ]; then # Add folder
 			# Kalla på funktion för att skapa en folder
+			echo "folder:add" # Bash ger error utan något här inne
 		elif [ $opt2 = "list" ]; then # List folders
 			# Kalla på funktion för att lista folders
+			echo "folder:list" # Bash ger error utan något här inne
 		elif [ $opt2 = "view" ]; then # View folders
 			# Kalla på funktion för att (lista innehållet i / visa rättigheter ???) för en folder
+			echo "folder:view" # Bash ger error utan något här inne
 		else # Modify folders
 			# Kalla på funktion för att modifiera en folder (ändra ägare / rättigheter???)
+			echo "folder:mod" # Bash ger error utan något här inne
 		fi
 	fi
 
