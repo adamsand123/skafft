@@ -29,18 +29,30 @@ get_input() {
 
 # FUNKTION - process input
 process_input() {
+#	# ------------ LÄGG TILL FUNKTION FÖR '?' -----------------
+#	while [ $(echo $val | grep -o '.$') = '?' ]; do
+#		echo "funkar?"
+#		if [ -z $(echo $val | cut -d: -f2) ]; then # Kolla om andra delen av input (efter : ) är tom isåfall skriv ut alternativ för del 1
+#			echo "Second part empty"
+#		else # Om andra delen inte är tom skriv ut alternativ för del 2
+#			echo "Second part not empty"
+#		fi
+#		get_input
+#	done
+
+
+
 	# Dela upp input i två variabler separerade med delimiter ':'
 	opt1=$(echo $val | cut -d: -f1)
 	opt2=$(echo $val | cut -d: -f2)
 
-	# ------------ LÄGG TILL FUNKTION FÖR '?' -----------------
 
 	# If-sats: kollar om opt1 är en substräng till group, user, eller folder (till exakt en av strängarna)
-	if [ $(echo -e "group\nuser\nfolder" | grep ^$opt1 | wc -l) = 1 ]; then
+	if [ $(echo -e "group\nuser\nfolder" | grep ^$opt1 | wc -l) -eq 1 ]; then
 		opt1=$(echo -e "group\nuser\nfolder" | grep ^$opt1) # Sätter opt1 till det val som matchades från input
 
 	# ---------- FELKONTROLL OM FLERA MÖJLIGA MATCHNINGAR (BEHÖVS EJ FÖR DE HÄR VALEN) -------------
-	elif [ $(echo -e "group\nuser\nfolder" | grep ^$opt1 | wc -l) > 1 ]; then # OM flera matchningar
+	elif [ $(echo -e "group\nuser\nfolder" | grep ^$opt1 | wc -l) -gt 1 ]; then # OM flera matchningar
 		echo -e "ERROR: ambiguous command, possibilities:\n$(echo -e "group\nuser\nfolder" | grep ^$opt1)"
 
 	else # OM ingen matchning
@@ -48,11 +60,11 @@ process_input() {
 	fi
 
 	# If-sats: kollar om opt2 är en substräng till add, list, view, eller modify (till exakt en av strängarna)
-	if [ $(echo -e "add\nlist\nview\nmodify" | grep ^$opt2 | wc -l) = 1 ]; then
+	if [ $(echo -e "add\nlist\nview\nmodify" | grep ^$opt2 | wc -l) -eq 1 ]; then
 		opt2=$(echo -e "add\nlist\nview\nmodify" | grep $opt2) # Sätter opt2 till det val som matchades från input
 
 	# ---------- FELKONTROLL OM FLERA MÖJLIGA MATCHNINGAR (BEHÖVS EJ FÖR DE HÄR VALEN) -------------
-	elif [ $(echo -e "add\nlist\nview\nmodify" | grep ^$opt2 | wc -l) > 1 ]; then # OM flera matchningar
+	elif [ $(echo -e "add\nlist\nview\nmodify" | grep ^$opt2 | wc -l) -gt 1 ]; then # OM flera matchningar
 		echo -e "ERROR: ambiguous command, possibilities:\n$(echo -e "add\nlist\nview\nmodify" | grep ^$opt2)"
 
 	else
